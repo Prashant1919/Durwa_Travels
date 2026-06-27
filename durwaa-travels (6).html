@@ -1,0 +1,2094 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DURWA TRAVELS — Connecting Journeys, Exploring New Horizons</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <!-- Google Fonts: Plus Jakarta Sans + Playfair Display -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              dark:    '#0B1120',
+              darker:  '#070d18',
+              navy:    '#0f1a2e',
+              maroon:  '#7f1d1d',
+              amber:   '#f59e0b',
+              amberHov:'#d97706',
+            }
+          },
+          fontFamily: {
+            jakarta: ['"Plus Jakarta Sans"', 'sans-serif'],
+            display: ['"Playfair Display"', 'serif'],
+          },
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* ─── Base ─────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: #0B1120;
+      color: #f1f5f9;
+      margin: 0;
+    }
+
+    /* ─── Noise grain overlay ───────────────────────── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.35;
+    }
+
+    /* ─── Scrollbar ─────────────────────────────────── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #0B1120; }
+    ::-webkit-scrollbar-thumb { background: #f59e0b; border-radius: 3px; }
+
+    /* ─── Navbar ────────────────────────────────────── */
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(11,17,32,0.88);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(245,158,11,0.15);
+    }
+
+    /* ─── Logo ──────────────────────────────────────── */
+    .logo-dt {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 800;
+      font-size: 1.25rem;
+      letter-spacing: -0.02em;
+    }
+
+    /* ─── Hero ──────────────────────────────────────── */
+    .hero-section {
+      background: #0B1120;
+      position: relative;
+      overflow: hidden;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+    }
+    .hero-section::before {
+      content: '';
+      position: absolute;
+      top: -20%;
+      right: -10%;
+      width: 700px;
+      height: 700px;
+      background: radial-gradient(circle, rgba(245,158,11,0.12) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    .hero-section::after {
+      content: '';
+      position: absolute;
+      bottom: -15%;
+      left: -8%;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(127,29,29,0.18) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    .hero-grid-lines {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(245,158,11,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(245,158,11,0.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+    }
+
+    /* ─── Glass card ────────────────────────────────── */
+    .glass-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.12);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-radius: 20px;
+    }
+    .glass-input {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 10px;
+      color: #f1f5f9;
+      padding: 12px 16px;
+      width: 100%;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.875rem;
+      outline: none;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .glass-input::placeholder { color: rgba(241,245,249,0.4); }
+    .glass-input:focus {
+      border-color: rgba(245,158,11,0.6);
+      background: rgba(255,255,255,0.1);
+    }
+    .glass-input option { background: #1e293b; color: #f1f5f9; }
+
+    /* ─── CTA Button ────────────────────────────────── */
+    .btn-amber {
+      background: #f59e0b;
+      color: #0B1120;
+      font-weight: 700;
+      font-size: 0.9rem;
+      letter-spacing: 0.02em;
+      padding: 13px 28px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+    }
+    .btn-amber:hover {
+      background: #d97706;
+      transform: translateY(-1px);
+      box-shadow: 0 8px 30px rgba(245,158,11,0.35);
+    }
+    .btn-amber:active { transform: translateY(0); }
+
+    /* ─── Services Section ──────────────────────────── */
+    .services-section {
+      background: #ffffff;
+      position: relative;
+    }
+    .service-card {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+      position: relative;
+    }
+    .service-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.12);
+      border-color: #f59e0b;
+    }
+    .service-card.featured {
+      border: 2px solid #7f1d1d;
+      background: linear-gradient(135deg, #fff 0%, #fff5f5 100%);
+    }
+    .service-card.featured:hover {
+      border-color: #f59e0b;
+    }
+    .service-icon-wrap {
+      width: 56px; height: 56px;
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem;
+    }
+
+    /* ─── Stats Bar ─────────────────────────────────── */
+    .stats-bar {
+      background: linear-gradient(135deg, #7f1d1d 0%, #991b1b 100%);
+      border-top: 1px solid rgba(245,158,11,0.2);
+      border-bottom: 1px solid rgba(245,158,11,0.2);
+    }
+
+    /* ─── Footer ────────────────────────────────────── */
+    .footer-section {
+      background: #070d18;
+      border-top: 1px solid rgba(245,158,11,0.15);
+    }
+
+    /* ─── Admin Dashboard ───────────────────────────── */
+    .admin-wrapper {
+      background: #060b14;
+      border-top: 4px solid #f59e0b;
+    }
+    .hero-form-col {
+      display: none;
+    }
+    @media (min-width: 1024px) {
+      .hero-form-col { display: block; }
+    }
+    .admin-demo-banner {
+      background: linear-gradient(90deg, #f59e0b 0%, #d97706 100%);
+      color: #0B1120;
+      font-weight: 800;
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-align: center;
+      padding: 10px;
+      text-transform: uppercase;
+    }
+    .admin-sidebar {
+      background: #0a1020;
+      border-right: 1px solid rgba(255,255,255,0.06);
+      width: 220px;
+      min-height: 700px;
+      flex-shrink: 0;
+    }
+    .sidebar-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 20px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: #94a3b8;
+      border-radius: 8px;
+      margin: 2px 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+    .sidebar-link:hover, .sidebar-link.active {
+      background: rgba(245,158,11,0.1);
+      color: #f59e0b;
+    }
+    .sidebar-link.active { border-left: 3px solid #f59e0b; border-radius: 0 8px 8px 0; margin-left: 0; padding-left: 17px; }
+    .admin-main {
+      flex: 1;
+      background: #0d1526;
+      padding: 28px;
+      overflow: auto;
+    }
+    .admin-table th {
+      background: #0a1020;
+      color: #64748b;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .admin-table td {
+      padding: 14px 16px;
+      font-size: 0.83rem;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      vertical-align: middle;
+      color: #cbd5e1;
+    }
+    .admin-table tr:hover td { background: rgba(245,158,11,0.04); }
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+    }
+    .status-pending {
+      background: rgba(245,158,11,0.12);
+      color: #f59e0b;
+      border: 1px solid rgba(245,158,11,0.25);
+    }
+    .status-assigned {
+      background: rgba(34,197,94,0.1);
+      color: #22c55e;
+      border: 1px solid rgba(34,197,94,0.25);
+    }
+    .status-enroute {
+      background: rgba(59,130,246,0.1);
+      color: #60a5fa;
+      border: 1px solid rgba(59,130,246,0.25);
+    }
+    .btn-dispatch {
+      background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
+      color: #fff;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 7px 12px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: opacity 0.2s, transform 0.15s;
+      white-space: nowrap;
+    }
+    .btn-dispatch:hover { opacity: 0.88; transform: translateY(-1px); }
+
+    /* ─── Modal ─────────────────────────────────────── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(6,11,20,0.85);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index: 5000;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal-box {
+      background: #0f1a2e;
+      border: 1px solid rgba(245,158,11,0.2);
+      border-radius: 20px;
+      width: 100%;
+      max-width: 520px;
+      margin: 0 16px;
+      box-shadow: 0 40px 100px rgba(0,0,0,0.6);
+      animation: modalIn 0.3s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    @keyframes modalIn {
+      from { opacity:0; transform: scale(0.9) translateY(20px); }
+      to   { opacity:1; transform: scale(1) translateY(0); }
+    }
+    .wa-preview {
+      background: #0a1929;
+      border: 1px solid rgba(37,211,102,0.2);
+      border-radius: 12px;
+      padding: 16px;
+      font-size: 0.82rem;
+      line-height: 1.7;
+      color: #94a3b8;
+      font-family: monospace;
+      position: relative;
+    }
+    .wa-preview::before {
+      content: 'WhatsApp Preview';
+      position: absolute;
+      top: -10px;
+      left: 14px;
+      background: #25d366;
+      color: #fff;
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 2px 10px;
+      border-radius: 20px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      letter-spacing: 0.05em;
+    }
+    .select-dark {
+      background: #0d1526;
+      border: 1px solid rgba(255,255,255,0.12);
+      color: #f1f5f9;
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.85rem;
+      width: 100%;
+      outline: none;
+    }
+    .select-dark:focus { border-color: #f59e0b; }
+
+    /* ─── Animations ────────────────────────────────── */
+    @keyframes fadeUp {
+      from { opacity:0; transform:translateY(30px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+    .animate-fade-up { animation: fadeUp 0.8s ease both; }
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.25s; }
+    .delay-3 { animation-delay: 0.4s; }
+    .delay-4 { animation-delay: 0.55s; }
+
+    /* ─── Nav link underline ────────────────────────── */
+    .nav-link {
+      position: relative;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: #94a3b8;
+      text-decoration: none;
+      transition: color 0.2s;
+      padding-bottom: 2px;
+    }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -2px; left: 0;
+      width: 0; height: 2px;
+      background: #f59e0b;
+      border-radius: 2px;
+      transition: width 0.25s ease;
+    }
+    .nav-link:hover { color: #f1f5f9; }
+    .nav-link:hover::after { width: 100%; }
+
+    /* ─── Section label pill ────────────────────────── */
+    .section-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(245,158,11,0.1);
+      border: 1px solid rgba(245,158,11,0.25);
+      color: #f59e0b;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 5px 14px;
+      border-radius: 20px;
+    }
+    .section-pill-dark {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(127,29,29,0.12);
+      border: 1px solid rgba(127,29,29,0.3);
+      color: #ef4444;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 5px 14px;
+      border-radius: 20px;
+    }
+
+    /* ─── Divider chrome line ───────────────────────── */
+    .chrome-line {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(245,158,11,0.4), transparent);
+    }
+
+    /* ─── Vehicles Section ──────────────────────────── */
+    .vehicle-card {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 20px;
+      overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+      position: relative;
+    }
+    .vehicle-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 24px 60px rgba(0,0,0,0.13);
+      border-color: #f59e0b;
+    }
+    .vehicle-card.premium-vehicle {
+      border: 2px solid #9333ea;
+      background: linear-gradient(135deg, #fdf4ff 0%, #fff 60%);
+    }
+    .vehicle-card.premium-vehicle:hover {
+      border-color: #f59e0b;
+    }
+    .vehicle-img-wrap {
+      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+      height: 180px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .vehicle-img-wrap .vehicle-icon {
+      font-size: 5rem;
+      line-height: 1;
+    }
+    .vehicle-img-wrap::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 40px;
+      background: linear-gradient(to top, rgba(248,250,252,0.9), transparent);
+    }
+    .premium-badge {
+      position: absolute;
+      top: 12px; right: 12px;
+      background: linear-gradient(135deg, #9333ea, #7c3aed);
+      color: #fff;
+      font-size: 0.65rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .vehicle-spec-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: #f1f5f9;
+      color: #475569;
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 20px;
+    }
+
+    /* ─── Mobile hamburger ───────────────────────────── */
+    .mobile-menu-btn {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      padding: 6px;
+      cursor: pointer;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 8px;
+    }
+    .mobile-menu-btn span {
+      display: block;
+      width: 20px;
+      height: 2px;
+      background: #94a3b8;
+      border-radius: 2px;
+      transition: all 0.3s;
+    }
+    .mobile-nav {
+      display: none;
+      position: fixed;
+      top: 64px;
+      left: 0; right: 0;
+      background: rgba(11,17,32,0.98);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(245,158,11,0.15);
+      z-index: 999;
+      padding: 16px 20px 24px;
+    }
+    .mobile-nav.open { display: block; }
+    .mobile-nav a {
+      display: block;
+      padding: 12px 16px;
+      color: #94a3b8;
+      font-size: 0.95rem;
+      font-weight: 500;
+      text-decoration: none;
+      border-radius: 8px;
+      transition: all 0.2s;
+    }
+    .mobile-nav a:hover { background: rgba(245,158,11,0.1); color: #f59e0b; }
+
+    /* ─── Responsive helpers ─────────────────────────── */
+    @media (max-width: 768px) {
+      .admin-sidebar { display: none; }
+      .hero-form-col { display: none; }
+      .mobile-menu-btn { display: flex; }
+
+      /* Hero responsive */
+      .hero-section { min-height: auto; padding: 40px 0 60px; }
+      .hero-section h1 { font-size: 2.6rem !important; }
+
+      /* Stats */
+      .stats-bar .grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+
+      /* Services */
+      .services-section .grid { grid-template-columns: 1fr !important; }
+      .service-card.featured { }
+
+      /* Vehicles */
+      #vehicles .grid { grid-template-columns: 1fr !important; }
+
+      /* Corporate section */
+      #corporate .grid { grid-template-columns: 1fr !important; }
+      #corporate .grid > div:first-child .grid { grid-template-columns: 1fr !important; }
+
+      /* Footer */
+      .footer-section .grid { grid-template-columns: 1fr 1fr !important; }
+
+      /* Admin table scroll */
+      .admin-main { padding: 16px; overflow-x: auto; }
+      .admin-table { min-width: 680px; }
+
+      /* Modal */
+      .modal-box { margin: 0 10px; }
+      .grid.grid-cols-3 { grid-template-columns: 1fr !important; }
+    }
+
+    @media (max-width: 480px) {
+      .hero-section h1 { font-size: 2rem !important; }
+      .footer-section .grid { grid-template-columns: 1fr !important; }
+      .stats-bar .grid { grid-template-columns: repeat(2, 1fr); }
+      .btn-amber { padding: 11px 20px; font-size: 0.82rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════
+     GLOBAL NAVIGATION
+════════════════════════════════════════════════════════ -->
+<nav class="navbar px-6 lg:px-12">
+  <div class="max-w-7xl mx-auto flex items-center justify-between h-16">
+
+    <!-- Logo -->
+    <a href="#" class="logo-dt flex items-center gap-2 no-underline">
+      <span style="color:#f59e0b; font-size:1.35rem; letter-spacing:-0.03em;">DT</span>
+      <span style="color:rgba(255,255,255,0.2); font-weight:300; font-size:1.1rem;">|</span>
+      <span style="color:#f1f5f9; font-size:0.95rem; font-weight:700; letter-spacing:0.06em;">DURWA TRAVELS</span>
+    </a>
+
+    <!-- Center nav links -->
+    <div class="hidden md:flex items-center gap-8">
+      <a href="#services"  class="nav-link">Services</a>
+      <a href="#vehicles"  class="nav-link">Vehicles</a>
+      <a href="#about"     class="nav-link">About</a>
+      <a href="#corporate" class="nav-link">Corporate</a>
+      <a href="#contact"   class="nav-link">Contact</a>
+    </div>
+
+    <!-- Right side actions -->
+    <div class="flex items-center gap-3">
+      <a href="tel:7776976767" class="hidden md:inline-flex items-center gap-2 text-sm font-600 text-amber-400 hover:text-amber-300 transition-colors">
+        <i class="fas fa-phone-alt text-xs"></i>
+        7776976767
+      </a>
+      <a href="#admin-dashboard" class="hidden md:inline-flex text-xs font-600 px-4 py-2 rounded-lg border border-white/10 text-slate-400 hover:border-amber-500/40 hover:text-slate-200 transition-all">
+        <i class="fas fa-lock mr-1.5 text-xs opacity-60"></i>Admin Login
+      </a>
+      <!-- Hamburger -->
+      <button class="mobile-menu-btn md:hidden" onclick="toggleMobileMenu()" aria-label="Menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+
+  </div>
+</nav>
+
+<!-- Mobile Nav -->
+<div class="mobile-nav" id="mobileNav">
+  <a href="#services" onclick="closeMobileMenu()"><i class="fas fa-concierge-bell mr-2 text-amber-500/60 text-sm"></i>Services</a>
+  <a href="#vehicles" onclick="closeMobileMenu()"><i class="fas fa-car mr-2 text-amber-500/60 text-sm"></i>Vehicles</a>
+  <a href="#about" onclick="closeMobileMenu()"><i class="fas fa-info-circle mr-2 text-amber-500/60 text-sm"></i>About</a>
+  <a href="#corporate" onclick="closeMobileMenu()"><i class="fas fa-building mr-2 text-amber-500/60 text-sm"></i>Corporate</a>
+  <a href="#contact" onclick="closeMobileMenu()"><i class="fas fa-envelope mr-2 text-amber-500/60 text-sm"></i>Contact</a>
+  <div class="mt-4 pt-4 border-t border-white/[0.06] flex gap-3">
+    <a href="tel:7776976767" class="flex-1 text-center py-2.5 rounded-lg bg-amber-500/10 text-amber-400 text-sm font-600">
+      <i class="fas fa-phone-alt mr-1"></i> Call Now
+    </a>
+    <a href="https://wa.me/917776976767" class="flex-1 text-center py-2.5 rounded-lg text-white text-sm font-600" style="background:#25d366;">
+      <i class="fab fa-whatsapp mr-1"></i> WhatsApp
+    </a>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════
+     HERO SECTION
+════════════════════════════════════════════════════════ -->
+<section class="hero-section">
+  <div class="hero-grid-lines"></div>
+
+  <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-12 py-20 w-full">
+    <div class="grid lg:grid-cols-2 gap-16 items-center">
+
+      <!-- Left: Copy -->
+      <div class="animate-fade-up">
+        <div class="section-pill mb-6">
+          <i class="fas fa-circle text-[8px]"></i> B2B Enterprise Transport · Pune
+        </div>
+
+        <h1 class="font-display text-5xl lg:text-6xl font-bold leading-tight mb-6" style="color:#f1f5f9; line-height:1.1;">
+          Connecting<br/>
+          <span style="color:#f59e0b;">Journeys,</span><br/>
+          <span style="color:rgba(241,245,249,0.7);">Exploring New</span><br/>
+          Horizons
+        </h1>
+
+        <p class="text-slate-400 text-lg leading-relaxed mb-8 max-w-lg">
+          Reliable, tech-enabled employee transportation for Pune's leading IT sector companies. Zero-compromise safety, real-time tracking, and seamless operations — built for enterprise scale.
+        </p>
+
+        <div class="flex flex-wrap gap-4 mb-12">
+          <button class="btn-amber">
+            <i class="fas fa-building"></i>
+            Get Corporate Quote
+          </button>
+          <a href="tel:7776976767" class="inline-flex items-center gap-2 px-6 py-3 rounded-lg border border-white/10 text-slate-300 text-sm font-600 hover:border-amber-500/30 hover:text-white transition-all">
+            <i class="fas fa-phone text-amber-500"></i>
+            Call Us Now
+          </a>
+        </div>
+        <!-- Mobile quick enquiry strip -->
+        <div class="lg:hidden mb-8 glass-card p-5">
+          <div class="flex items-center gap-2 mb-3">
+            <div class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></div>
+            <span class="text-xs font-700 text-amber-400 tracking-widest uppercase">Quick Enquiry</span>
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <a href="tel:7776976767" class="btn-amber justify-center text-sm py-3">
+              <i class="fas fa-phone-alt"></i> Call Now
+            </a>
+            <a href="https://wa.me/917776976767" class="inline-flex items-center justify-center gap-2 py-3 rounded-lg text-white text-sm font-600 transition-all" style="background:#25d366;">
+              <i class="fab fa-whatsapp"></i> WhatsApp
+            </a>
+          </div>
+        </div>
+
+        <!-- Trust badges -->
+        <div class="flex flex-wrap gap-6">
+          <div class="flex items-center gap-2 text-slate-500 text-sm">
+            <i class="fas fa-shield-alt text-amber-500/60"></i>
+            <span>GPS Tracked Fleets</span>
+          </div>
+          <div class="flex items-center gap-2 text-slate-500 text-sm">
+            <i class="fas fa-clock text-amber-500/60"></i>
+            <span>24/7 Operations</span>
+          </div>
+          <div class="flex items-center gap-2 text-slate-500 text-sm">
+            <i class="fas fa-users text-amber-500/60"></i>
+            <span>IT Sector Specialists</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Glass Enquiry Form -->
+      <div class="glass-card p-8 animate-fade-up delay-2 hero-form-col lg:block">
+        <div class="flex items-center gap-3 mb-1">
+          <div class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></div>
+          <span class="text-xs font-700 text-amber-400 tracking-widest uppercase">Quick Corporate Enquiry</span>
+        </div>
+        <p class="text-slate-500 text-sm mb-7">Get a customised transport proposal within 2 business hours.</p>
+
+        <div class="space-y-4">
+          <div>
+            <label class="block text-xs text-slate-500 font-600 mb-1.5 uppercase tracking-wider">Your Name</label>
+            <input type="text" class="glass-input" placeholder="Rahul Sharma" />
+          </div>
+          <div>
+            <label class="block text-xs text-slate-500 font-600 mb-1.5 uppercase tracking-wider">IT Company Name</label>
+            <input type="text" class="glass-input" placeholder="e.g. Infosys, TCS, Wipro" />
+          </div>
+          <div>
+            <label class="block text-xs text-slate-500 font-600 mb-1.5 uppercase tracking-wider">Phone Number</label>
+            <input type="tel" class="glass-input" placeholder="+91 98765 43210" />
+          </div>
+          <div>
+            <label class="block text-xs text-slate-500 font-600 mb-1.5 uppercase tracking-wider">Service Required</label>
+            <select class="glass-input">
+              <option value="" disabled selected>Select a service…</option>
+              <option>Employee Transportation (Daily Shift)</option>
+              <option>Car Rental (Monthly Contract)</option>
+              <option>Airport Pickup & Drop</option>
+              <option>Tours & Travels</option>
+              <option>Premium Car Services</option>
+            </select>
+          </div>
+          <button class="btn-amber w-full justify-center mt-2">
+            <i class="fas fa-paper-plane"></i>
+            Request Quote
+          </button>
+        </div>
+
+        <p class="text-slate-600 text-xs mt-4 text-center">
+          <i class="fas fa-lock mr-1"></i>Your details are 100% confidential & never shared.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════
+     STATS BAR
+════════════════════════════════════════════════════════ -->
+<div class="stats-bar py-6">
+  <div class="max-w-7xl mx-auto px-6 lg:px-12">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+      <div>
+        <div class="text-3xl font-bold text-white font-display">500+</div>
+        <div class="text-red-200 text-xs font-500 mt-1 uppercase tracking-wider">Employees Transported Daily</div>
+      </div>
+      <div>
+        <div class="text-3xl font-bold text-white font-display">30+</div>
+        <div class="text-red-200 text-xs font-500 mt-1 uppercase tracking-wider">Corporate Clients</div>
+      </div>
+      <div>
+        <div class="text-3xl font-bold text-white font-display">50+</div>
+        <div class="text-red-200 text-xs font-500 mt-1 uppercase tracking-wider">Vehicles in Fleet</div>
+      </div>
+      <div>
+        <div class="text-3xl font-bold text-white font-display">99.2%</div>
+        <div class="text-red-200 text-xs font-500 mt-1 uppercase tracking-wider">On-Time Delivery</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════
+     SERVICES SECTION
+════════════════════════════════════════════════════════ -->
+<section id="services" class="services-section py-24">
+  <div class="max-w-7xl mx-auto px-6 lg:px-12">
+
+    <div class="text-center mb-16">
+      <div class="section-pill-dark mb-4 inline-flex">
+        <i class="fas fa-circle text-[8px]"></i> What We Offer
+      </div>
+      <h2 class="font-display text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
+        Our Premium Services
+      </h2>
+      <p class="text-slate-500 text-lg max-w-2xl mx-auto leading-relaxed">
+        From daily IT shift runs to luxury airport transfers — purpose-built transport solutions for every corporate need.
+      </p>
+    </div>
+
+    <!-- Services Grid -->
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+      <!-- Card 1: Employee Transportation (FEATURED) -->
+      <div class="service-card featured col-span-1 md:col-span-2 lg:col-span-1 lg:row-span-1">
+        <div class="p-8">
+          <div class="flex items-start justify-between mb-6">
+            <div class="service-icon-wrap" style="background:rgba(127,29,29,0.08);">
+              <i class="fas fa-bus-alt" style="color:#7f1d1d;"></i>
+            </div>
+            <span class="text-xs font-700 px-3 py-1 rounded-full" style="background:#7f1d1d; color:#fff; letter-spacing:0.05em;">
+              #1 B2B Priority
+            </span>
+          </div>
+          <h3 class="text-xl font-bold text-gray-900 mb-3">Employee Transportation</h3>
+          <p class="text-slate-500 text-sm leading-relaxed mb-6">
+            Dedicated shift-based transport solutions for IT parks and corporate campuses. Daily rosters, WhatsApp dispatch, GPS tracking, and compliance reports — all included.
+          </p>
+          <div class="space-y-2 mb-6">
+            <div class="flex items-center gap-2 text-sm text-slate-600">
+              <i class="fas fa-check-circle text-amber-500 text-xs"></i> Morning & Night Shift Coverage
+            </div>
+            <div class="flex items-center gap-2 text-sm text-slate-600">
+              <i class="fas fa-check-circle text-amber-500 text-xs"></i> Dedicated Route Managers
+            </div>
+            <div class="flex items-center gap-2 text-sm text-slate-600">
+              <i class="fas fa-check-circle text-amber-500 text-xs"></i> Monthly SLA Reports
+            </div>
+          </div>
+          <button class="btn-amber text-sm">Explore Package <i class="fas fa-arrow-right text-xs"></i></button>
+        </div>
+        <!-- Decorative stripe -->
+        <div style="height:4px; background:linear-gradient(90deg,#7f1d1d,#f59e0b);"></div>
+      </div>
+
+      <!-- Card 2: Car Rental -->
+      <div class="service-card">
+        <div class="p-7">
+          <div class="service-icon-wrap mb-5" style="background:#fef3c7;">
+            <i class="fas fa-car" style="color:#d97706;"></i>
+          </div>
+          <h3 class="text-lg font-bold text-gray-900 mb-2">Car Rental</h3>
+          <p class="text-slate-500 text-sm leading-relaxed mb-5">
+            Flexible rental packages for corporate events, client visits, and executive travel. Daily, weekly, or monthly contracts.
+          </p>
+          <div class="flex flex-wrap gap-2 mb-6">
+            <span class="text-xs px-2.5 py-1 rounded-full bg-slate-100 text-slate-600">Sedan</span>
+            <span class="text-xs px-2.5 py-1 rounded-full bg-slate-100 text-slate-600">SUV</span>
+            <span class="text-xs px-2.5 py-1 rounded-full bg-slate-100 text-slate-600">Tempo Traveller</span>
+          </div>
+          <a href="#" class="text-sm font-600 text-amber-600 hover:text-amber-700 flex items-center gap-1 transition-colors">
+            View Fleet <i class="fas fa-arrow-right text-xs"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Card 3: Airport Service -->
+      <div class="service-card">
+        <div class="p-7">
+          <div class="service-icon-wrap mb-5" style="background:#eff6ff;">
+            <i class="fas fa-plane-departure" style="color:#3b82f6;"></i>
+          </div>
+          <h3 class="text-lg font-bold text-gray-900 mb-2">Airport Pickup & Drop</h3>
+          <p class="text-slate-500 text-sm leading-relaxed mb-5">
+            Punctual, flight-tracked airport transfers to/from Pune International Airport. Available round the clock.
+          </p>
+          <div class="flex flex-wrap gap-2 mb-6">
+            <span class="text-xs px-2.5 py-1 rounded-full bg-slate-100 text-slate-600">24/7 Service</span>
+            <span class="text-xs px-2.5 py-1 rounded-full bg-slate-100 text-slate-600">Flight Tracking</span>
+          </div>
+          <a href="#" class="text-sm font-600 text-amber-600 hover:text-amber-700 flex items-center gap-1 transition-colors">
+            Book Transfer <i class="fas fa-arrow-right text-xs"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Card 4: Tours & Travels -->
+      <div class="service-card">
+        <div class="p-7">
+          <div class="service-icon-wrap mb-5" style="background:#f0fdf4;">
+            <i class="fas fa-map-marked-alt" style="color:#16a34a;"></i>
+          </div>
+          <h3 class="text-lg font-bold text-gray-900 mb-2">Tours & Travels</h3>
+          <p class="text-slate-500 text-sm leading-relaxed mb-5">
+            Curated group tours, team outings, and pilgrimage packages across Maharashtra and pan-India.
+          </p>
+          <div class="flex flex-wrap gap-2 mb-6">
+            <span class="text-xs px-2.5 py-1 rounded-full bg-slate-100 text-slate-600">Team Outings</span>
+            <span class="text-xs px-2.5 py-1 rounded-full bg-slate-100 text-slate-600">Pilgrimages</span>
+          </div>
+          <a href="#" class="text-sm font-600 text-amber-600 hover:text-amber-700 flex items-center gap-1 transition-colors">
+            Explore Tours <i class="fas fa-arrow-right text-xs"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Card 5: Premium Car Services -->
+      <div class="service-card" style="border:2px solid #9333ea; background:linear-gradient(135deg,#fdf4ff,#fff);">
+        <div class="p-7">
+          <div class="flex items-start justify-between mb-5">
+            <div class="service-icon-wrap" style="background:#fdf4ff;">
+              <i class="fas fa-gem" style="color:#9333ea;"></i>
+            </div>
+            <span class="text-xs font-800 px-3 py-1.5 rounded-full flex items-center gap-1.5" style="background:linear-gradient(135deg,#9333ea,#7c3aed); color:#fff; letter-spacing:0.05em;">
+              <i class="fas fa-gem text-[9px]"></i> PREMIUM
+            </span>
+          </div>
+          <h3 class="text-lg font-bold text-gray-900 mb-2">Premium Car Services</h3>
+          <p class="text-slate-500 text-sm leading-relaxed mb-5">
+            Executive chauffeur-driven luxury vehicles for C-suite travel, VIP guests, and high-profile corporate events.
+          </p>
+          <div class="flex flex-wrap gap-2 mb-6">
+            <span class="text-xs px-2.5 py-1 rounded-full font-600" style="background:#fdf4ff; color:#7c3aed; border:1px solid rgba(147,51,234,0.2);">Innova Crysta</span>
+            <span class="text-xs px-2.5 py-1 rounded-full font-600" style="background:#fdf4ff; color:#7c3aed; border:1px solid rgba(147,51,234,0.2);">Mercedes</span>
+            <span class="text-xs px-2.5 py-1 rounded-full font-600" style="background:#fdf4ff; color:#7c3aed; border:1px solid rgba(147,51,234,0.2);">BMW 5 Series</span>
+          </div>
+          <div class="space-y-2 mb-6">
+            <div class="flex items-center gap-2 text-sm text-slate-600">
+              <i class="fas fa-check-circle text-purple-500 text-xs"></i> Professional Chauffeurs
+            </div>
+            <div class="flex items-center gap-2 text-sm text-slate-600">
+              <i class="fas fa-check-circle text-purple-500 text-xs"></i> Bottled Water & Wi-Fi
+            </div>
+            <div class="flex items-center gap-2 text-sm text-slate-600">
+              <i class="fas fa-check-circle text-purple-500 text-xs"></i> 24/7 Concierge Support
+            </div>
+          </div>
+          <a href="#contact" class="inline-flex items-center gap-1.5 text-sm font-700 px-5 py-2.5 rounded-lg transition-all" style="background:linear-gradient(135deg,#9333ea,#7c3aed); color:#fff;">
+            Request VIP Car <i class="fas fa-arrow-right text-xs"></i>
+          </a>
+        </div>
+        <!-- Decorative stripe -->
+        <div style="height:4px; background:linear-gradient(90deg,#9333ea,#f59e0b);"></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════
+     VEHICLES / FLEET SECTION
+════════════════════════════════════════════════════════ -->
+<section id="vehicles" class="py-24" style="background:#f8fafc;">
+  <div class="max-w-7xl mx-auto px-6 lg:px-12">
+
+    <div class="text-center mb-16">
+      <div class="section-pill-dark mb-4 inline-flex">
+        <i class="fas fa-circle text-[8px]"></i> Our Fleet
+      </div>
+      <h2 class="font-display text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
+        Vehicles for Every Need
+      </h2>
+      <p class="text-slate-500 text-lg max-w-2xl mx-auto leading-relaxed">
+        From compact sedans to luxury SUVs and large tempo travellers — our well-maintained fleet is ready for every corporate requirement.
+      </p>
+    </div>
+
+    <!-- Vehicles Grid -->
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+      <!-- Vehicle 1: Sedan - Maruti Swift -->
+      <div class="vehicle-card" style="border:2px solid #f59e0b;">
+        <div class="vehicle-img-wrap" style="background:linear-gradient(135deg,#e0f2fe,#f0f9ff); height:200px; padding:16px;">
+          <img
+            src="https://www.kindpng.com/picc/m/123-1231960_suzuki-swift-2018-png-transparent-png.png"
+            alt="Maruti Swift Car"
+            style="width:100%; height:100%; object-fit:contain; object-position:center; filter:drop-shadow(0 8px 20px rgba(0,0,0,0.18)); transform:scale(1.05);"
+            loading="lazy"
+          />
+          <div class="premium-badge" style="background:linear-gradient(135deg,#f59e0b,#d97706); top:12px; right:12px;">
+            <i class="fas fa-star text-[9px]"></i> Popular
+          </div>
+        </div>
+        <div class="p-6">
+          <div class="flex items-start justify-between mb-3">
+            <h3 class="text-lg font-bold text-gray-900">Sedan — Maruti Swift</h3>
+            <span class="vehicle-spec-pill"><i class="fas fa-user text-xs"></i> 4 Seats</span>
+          </div>
+          <p class="text-slate-500 text-sm leading-relaxed mb-4">
+            Comfortable A/C sedans for daily employee pick-ups, client visits, and point-to-point corporate transfers.
+          </p>
+          <div class="flex flex-wrap gap-2 mb-5">
+            <span class="vehicle-spec-pill" style="background:#fef3c7; color:#d97706; border:1px solid rgba(245,158,11,0.3);">Swift Dzire</span>
+            <span class="vehicle-spec-pill">Honda City</span>
+            <span class="vehicle-spec-pill">Tata Tigor</span>
+          </div>
+          <div class="flex items-center justify-between border-t border-slate-100 pt-4">
+            <div class="text-xs text-slate-400"><i class="fas fa-snowflake text-blue-400 mr-1"></i>A/C &nbsp;·&nbsp; <i class="fas fa-map-marker-alt text-amber-500 mr-1"></i>GPS</div>
+            <a href="#contact" class="text-sm font-600 text-amber-600 hover:text-amber-700 flex items-center gap-1 transition-colors">
+              Book Now <i class="fas fa-arrow-right text-xs"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Vehicle 2: SUV - Innova Crysta -->
+      <div class="vehicle-card">
+        <div class="vehicle-img-wrap" style="background:linear-gradient(135deg,#fef3c7,#fffbeb);">
+          <div class="vehicle-icon">🚙</div>
+        </div>
+        <div class="p-6">
+          <div class="flex items-start justify-between mb-3">
+            <h3 class="text-lg font-bold text-gray-900">SUV / MUV</h3>
+            <span class="vehicle-spec-pill"><i class="fas fa-user text-xs"></i> 6–7 Seats</span>
+          </div>
+          <p class="text-slate-500 text-sm leading-relaxed mb-4">
+            Spacious and powerful SUVs ideal for team outings, airport transfers, and executive group travel.
+          </p>
+          <div class="flex flex-wrap gap-2 mb-5">
+            <span class="vehicle-spec-pill">Innova Crysta</span>
+            <span class="vehicle-spec-pill">Ertiga</span>
+            <span class="vehicle-spec-pill">Scorpio</span>
+          </div>
+          <div class="flex items-center justify-between border-t border-slate-100 pt-4">
+            <div class="text-xs text-slate-400"><i class="fas fa-snowflake text-blue-400 mr-1"></i>A/C &nbsp;·&nbsp; <i class="fas fa-map-marker-alt text-amber-500 mr-1"></i>GPS</div>
+            <a href="#contact" class="text-sm font-600 text-amber-600 hover:text-amber-700 flex items-center gap-1 transition-colors">
+              Book Now <i class="fas fa-arrow-right text-xs"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Vehicle 3: Premium Luxury (PREMIUM BADGE) -->
+      <div class="vehicle-card premium-vehicle">
+        <div class="vehicle-img-wrap" style="background:linear-gradient(135deg,#fdf4ff,#f5f3ff);">
+          <div class="vehicle-icon">🏎️</div>
+          <div class="premium-badge">
+            <i class="fas fa-gem text-[9px]"></i> Premium
+          </div>
+        </div>
+        <div class="p-6">
+          <div class="flex items-start justify-between mb-3">
+            <h3 class="text-lg font-bold text-gray-900">Luxury Car</h3>
+            <span class="vehicle-spec-pill" style="background:#fdf4ff; color:#9333ea;"><i class="fas fa-star text-xs"></i> VIP</span>
+          </div>
+          <p class="text-slate-500 text-sm leading-relaxed mb-4">
+            Executive chauffeur-driven luxury vehicles for C-suite travel, VIP guests, and high-profile corporate events.
+          </p>
+          <div class="flex flex-wrap gap-2 mb-5">
+            <span class="vehicle-spec-pill" style="background:#fdf4ff; color:#7c3aed;">Mercedes E-Class</span>
+            <span class="vehicle-spec-pill" style="background:#fdf4ff; color:#7c3aed;">BMW 5 Series</span>
+          </div>
+          <div class="flex items-center justify-between border-t border-purple-100 pt-4">
+            <div class="text-xs text-slate-400"><i class="fas fa-snowflake text-blue-400 mr-1"></i>A/C &nbsp;·&nbsp; <i class="fas fa-user-tie text-purple-400 mr-1"></i>Chauffeur</div>
+            <a href="#contact" class="text-sm font-600 text-purple-600 hover:text-purple-700 flex items-center gap-1 transition-colors">
+              Request VIP <i class="fas fa-arrow-right text-xs"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Vehicle 4: Mini Bus -->
+      <div class="vehicle-card">
+        <div class="vehicle-img-wrap" style="background:linear-gradient(135deg,#f0fdf4,#dcfce7);">
+          <div class="vehicle-icon">🚐</div>
+        </div>
+        <div class="p-6">
+          <div class="flex items-start justify-between mb-3">
+            <h3 class="text-lg font-bold text-gray-900">Tempo Traveller</h3>
+            <span class="vehicle-spec-pill"><i class="fas fa-user text-xs"></i> 12 Seats</span>
+          </div>
+          <p class="text-slate-500 text-sm leading-relaxed mb-4">
+            Perfect for group transportation, team outings, and pilgrimage trips. Comfortable seating with ample luggage space.
+          </p>
+          <div class="flex flex-wrap gap-2 mb-5">
+            <span class="vehicle-spec-pill">Force Traveller</span>
+            <span class="vehicle-spec-pill">Tempo 12-Seater</span>
+          </div>
+          <div class="flex items-center justify-between border-t border-slate-100 pt-4">
+            <div class="text-xs text-slate-400"><i class="fas fa-snowflake text-blue-400 mr-1"></i>A/C &nbsp;·&nbsp; <i class="fas fa-map-marker-alt text-amber-500 mr-1"></i>GPS</div>
+            <a href="#contact" class="text-sm font-600 text-amber-600 hover:text-amber-700 flex items-center gap-1 transition-colors">
+              Book Now <i class="fas fa-arrow-right text-xs"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Vehicle 5: Mini Bus 20-seater -->
+      <div class="vehicle-card">
+        <div class="vehicle-img-wrap" style="background:linear-gradient(135deg,#fef9ec,#fef3c7);">
+          <div class="vehicle-icon">🚌</div>
+        </div>
+        <div class="p-6">
+          <div class="flex items-start justify-between mb-3">
+            <h3 class="text-lg font-bold text-gray-900">Mini Bus</h3>
+            <span class="vehicle-spec-pill"><i class="fas fa-user text-xs"></i> 20 Seats</span>
+          </div>
+          <p class="text-slate-500 text-sm leading-relaxed mb-4">
+            Dedicated shift transport for medium-sized IT teams. Ideal for companies with 15–20 employees per shift.
+          </p>
+          <div class="flex flex-wrap gap-2 mb-5">
+            <span class="vehicle-spec-pill">Tata Winger</span>
+            <span class="vehicle-spec-pill">20-Seater Bus</span>
+          </div>
+          <div class="flex items-center justify-between border-t border-slate-100 pt-4">
+            <div class="text-xs text-slate-400"><i class="fas fa-snowflake text-blue-400 mr-1"></i>A/C &nbsp;·&nbsp; <i class="fas fa-map-marker-alt text-amber-500 mr-1"></i>GPS</div>
+            <a href="#contact" class="text-sm font-600 text-amber-600 hover:text-amber-700 flex items-center gap-1 transition-colors">
+              Book Now <i class="fas fa-arrow-right text-xs"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Vehicle 6: Large Bus (PREMIUM for fleet) -->
+      <div class="vehicle-card" style="border:2px solid #f59e0b; background:linear-gradient(135deg,#fffbeb,#fff);">
+        <div class="vehicle-img-wrap" style="background:linear-gradient(135deg,#fef3c7,#fef9ec);">
+          <div class="vehicle-icon">🚍</div>
+          <div class="premium-badge" style="background:linear-gradient(135deg,#f59e0b,#d97706);">
+            <i class="fas fa-star text-[9px]"></i> Fleet Pick
+          </div>
+        </div>
+        <div class="p-6">
+          <div class="flex items-start justify-between mb-3">
+            <h3 class="text-lg font-bold text-gray-900">Large Bus</h3>
+            <span class="vehicle-spec-pill"><i class="fas fa-user text-xs"></i> 40+ Seats</span>
+          </div>
+          <p class="text-slate-500 text-sm leading-relaxed mb-4">
+            High-capacity buses for large IT campuses and corporate parks with bulk employee transport requirements.
+          </p>
+          <div class="flex flex-wrap gap-2 mb-5">
+            <span class="vehicle-spec-pill">Tata Starbus</span>
+            <span class="vehicle-spec-pill">Leyland Bus</span>
+          </div>
+          <div class="flex items-center justify-between border-t border-amber-100 pt-4">
+            <div class="text-xs text-slate-400"><i class="fas fa-snowflake text-blue-400 mr-1"></i>A/C &nbsp;·&nbsp; <i class="fas fa-map-marker-alt text-amber-500 mr-1"></i>GPS</div>
+            <a href="#contact" class="text-sm font-600 text-amber-600 hover:text-amber-700 flex items-center gap-1 transition-colors">
+              Get Quote <i class="fas fa-arrow-right text-xs"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Fleet CTA Strip -->
+    <div class="mt-12 rounded-2xl p-8 flex flex-col md:flex-row items-center justify-between gap-6" style="background:linear-gradient(135deg,#0f1a2e,#1e293b); border:1px solid rgba(245,158,11,0.2);">
+      <div>
+        <h3 class="text-white font-bold text-xl mb-1">50+ Vehicles Ready to Deploy</h3>
+        <p class="text-slate-400 text-sm">All vehicles are GPS-tracked, fully insured, and maintained to the highest safety standards.</p>
+      </div>
+      <div class="flex flex-wrap gap-3 flex-shrink-0">
+        <button class="btn-amber text-sm">
+          <i class="fas fa-file-alt"></i> Get Fleet Proposal
+        </button>
+        <a href="tel:7776976767" class="inline-flex items-center gap-2 px-5 py-3 rounded-lg border border-white/10 text-slate-300 text-sm font-600 hover:border-amber-500/30 hover:text-white transition-all">
+          <i class="fas fa-phone text-amber-500"></i> Call Fleet Manager
+        </a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════
+     WHY DURWA — DARK SECTION
+════════════════════════════════════════════════════════ -->
+<section id="corporate" style="background:#0B1120;" class="py-24">
+  <div class="max-w-7xl mx-auto px-6 lg:px-12">
+    <div class="grid lg:grid-cols-2 gap-16 items-center">
+      <div>
+        <div class="section-pill mb-5">
+          <i class="fas fa-circle text-[8px]"></i> Why Choose Us
+        </div>
+        <h2 class="font-display text-4xl font-bold text-white mb-6 leading-tight">
+          Built for Pune's<br/><span class="text-amber-400">IT Ecosystem</span>
+        </h2>
+        <p class="text-slate-400 leading-relaxed mb-10">
+          We understand the rhythm of IT shifts, BPO rotations, and tech-park operations. Durwa Travels is not just a transport vendor — we are your operational partner, ensuring your team arrives on time, every time.
+        </p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="glass-card p-5">
+            <i class="fas fa-route text-amber-400 mb-3 text-xl"></i>
+            <h4 class="text-white font-600 text-sm mb-1">Smart Route Planning</h4>
+            <p class="text-slate-500 text-xs leading-relaxed">AI-optimized routes minimize travel time and fuel costs across all Pune IT zones.</p>
+          </div>
+          <div class="glass-card p-5">
+            <i class="fab fa-whatsapp text-green-400 mb-3 text-xl"></i>
+            <h4 class="text-white font-600 text-sm mb-1">WhatsApp Dispatch</h4>
+            <p class="text-slate-500 text-xs leading-relaxed">Instant driver notifications via WhatsApp Cloud API. No app downloads required.</p>
+          </div>
+          <div class="glass-card p-5">
+            <i class="fas fa-file-invoice text-blue-400 mb-3 text-xl"></i>
+            <h4 class="text-white font-600 text-sm mb-1">GST Invoicing & Reports</h4>
+            <p class="text-slate-500 text-xs leading-relaxed">Automated monthly billing with GST-compliant invoices and SLA performance reports.</p>
+          </div>
+          <div class="glass-card p-5">
+            <i class="fas fa-user-shield text-purple-400 mb-3 text-xl"></i>
+            <h4 class="text-white font-600 text-sm mb-1">Verified Drivers</h4>
+            <p class="text-slate-500 text-xs leading-relaxed">All drivers are police-verified with background checks, training certificates, and regular audits.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Contact CTA card -->
+      <div id="contact">
+        <div class="glass-card p-8">
+          <h3 class="text-xl font-bold text-white mb-2">Get in Touch</h3>
+          <p class="text-slate-500 text-sm mb-7">Ready to streamline your employee transport? Reach out directly or fill the enquiry form.</p>
+          <div class="space-y-4">
+            <div class="flex items-start gap-4">
+              <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style="background:rgba(245,158,11,0.1);">
+                <i class="fas fa-map-marker-alt text-amber-400 text-sm"></i>
+              </div>
+              <div>
+                <div class="text-xs text-slate-500 uppercase tracking-wider mb-1">Office Address</div>
+                <div class="text-slate-300 text-sm leading-relaxed">Shop No.66, Ground Floor, Kumar Palladium Plaza,<br/>Wagholi, Pune – 412207</div>
+              </div>
+            </div>
+
+            <!-- Google Map Embed -->
+            <div style="border-radius:14px; overflow:hidden; border:1px solid rgba(245,158,11,0.2); position:relative;">
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3781.8!2d73.9845!3d18.5674!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc2c3e4b6b1a6a1%3A0x0!2sKumar+Palladium+Plaza%2C+Wagholi%2C+Pune%2C+Maharashtra+412207!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin"
+                width="100%"
+                height="200"
+                style="border:0; display:block; filter:grayscale(30%) contrast(1.1);"
+                allowfullscreen=""
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+                title="Durwa Travels Office Location">
+              </iframe>
+              <!-- "Open in Maps" overlay button -->
+              <a href="https://maps.google.com/?q=Kumar+Palladium+Plaza,+Wagholi,+Pune+412207" target="_blank" rel="noopener"
+                 style="position:absolute; bottom:10px; right:10px; background:#f59e0b; color:#0B1120; font-size:0.7rem; font-weight:800; padding:5px 12px; border-radius:8px; text-decoration:none; display:flex; align-items:center; gap:5px; box-shadow:0 4px 12px rgba(0,0,0,0.3); letter-spacing:0.03em;">
+                <i class="fas fa-external-link-alt" style="font-size:0.6rem;"></i> Open in Maps
+              </a>
+            </div>
+
+            <div class="chrome-line"></div>
+            <div class="flex items-start gap-4">
+              <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style="background:rgba(245,158,11,0.1);">
+                <i class="fas fa-phone-alt text-amber-400 text-sm"></i>
+              </div>
+              <div>
+                <div class="text-xs text-slate-500 uppercase tracking-wider mb-1">Phone</div>
+                <div class="text-slate-300 text-sm">
+                  <a href="tel:7776976767" class="hover:text-amber-400 transition-colors">+91 7776976767</a>
+                  <span class="text-slate-600 mx-2">/</span>
+                  <a href="tel:9146966670" class="hover:text-amber-400 transition-colors">+91 9146966670</a>
+                </div>
+              </div>
+            </div>
+            <div class="chrome-line"></div>
+            <div class="flex items-start gap-4">
+              <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style="background:rgba(245,158,11,0.1);">
+                <i class="fas fa-envelope text-amber-400 text-sm"></i>
+              </div>
+              <div>
+                <div class="text-xs text-slate-500 uppercase tracking-wider mb-1">Email</div>
+                <a href="mailto:booking@durwatravels.in" class="text-slate-300 text-sm hover:text-amber-400 transition-colors">booking@durwatravels.in</a>
+              </div>
+            </div>
+          </div>
+          <div class="mt-8 grid grid-cols-2 gap-3">
+            <button class="btn-amber justify-center text-sm">
+              <i class="fas fa-envelope"></i> Email Us
+            </button>
+            <a href="https://wa.me/917776976767" class="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-lg text-white text-sm font-600 transition-all" style="background:#25d366;">
+              <i class="fab fa-whatsapp"></i> WhatsApp
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+<!-- ═══════════════════════════════════════════════════════
+     ABOUT US SECTION
+════════════════════════════════════════════════════════ -->
+<section id="about" style="background:#ffffff;" class="py-24">
+  <div class="max-w-7xl mx-auto px-6 lg:px-12">
+
+    <!-- Section Header -->
+    <div class="text-center mb-16">
+      <div class="section-pill-dark mb-4 inline-flex">
+        <i class="fas fa-circle text-[8px]"></i> About Us
+      </div>
+      <h2 class="font-display text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
+        Who We Are
+      </h2>
+      <p class="text-slate-500 text-lg max-w-2xl mx-auto leading-relaxed">
+        A trusted name in corporate transport — built on reliability, safety, and a passion for seamless journeys.
+      </p>
+    </div>
+
+    <!-- Main Content Grid -->
+    <div class="grid lg:grid-cols-2 gap-16 items-center mb-20">
+
+      <!-- Left: Story -->
+      <div>
+        <h3 class="font-display text-3xl font-bold text-gray-900 mb-5 leading-tight">
+          Pune's Most Trusted<br/><span style="color:#f59e0b;">Corporate Transport Partner</span>
+        </h3>
+        <p class="text-slate-500 leading-relaxed mb-5">
+          Founded with a single mission — to make employee transportation stress-free, safe, and reliable — Durwa Travels has grown into one of Pune's leading B2B transport companies. We specialize in serving IT parks, BPO campuses, and corporate offices across the city.
+        </p>
+        <p class="text-slate-500 leading-relaxed mb-8">
+          From a small fleet to 50+ well-maintained vehicles, our journey has been defined by on-time pickups, professional drivers, and a genuine commitment to our clients' operational needs. Every shift we serve is a promise kept.
+        </p>
+
+        <!-- Highlights -->
+        <div class="grid grid-cols-2 gap-4 mb-8">
+          <div class="flex items-start gap-3 p-4 rounded-xl" style="background:#fff7ed; border:1px solid rgba(245,158,11,0.2);">
+            <i class="fas fa-calendar-check text-amber-500 mt-0.5 text-lg"></i>
+            <div>
+              <div class="font-700 text-gray-900 text-sm">Est. 2015</div>
+              <div class="text-slate-500 text-xs">10+ years of service</div>
+            </div>
+          </div>
+          <div class="flex items-start gap-3 p-4 rounded-xl" style="background:#f0fdf4; border:1px solid rgba(34,197,94,0.2);">
+            <i class="fas fa-shield-alt text-green-500 mt-0.5 text-lg"></i>
+            <div>
+              <div class="font-700 text-gray-900 text-sm">Zero Incidents</div>
+              <div class="text-slate-500 text-xs">Safety-first culture</div>
+            </div>
+          </div>
+          <div class="flex items-start gap-3 p-4 rounded-xl" style="background:#eff6ff; border:1px solid rgba(59,130,246,0.2);">
+            <i class="fas fa-map-marked-alt text-blue-500 mt-0.5 text-lg"></i>
+            <div>
+              <div class="font-700 text-gray-900 text-sm">Pan-Pune Routes</div>
+              <div class="text-slate-500 text-xs">Wagholi, Hinjewadi & more</div>
+            </div>
+          </div>
+          <div class="flex items-start gap-3 p-4 rounded-xl" style="background:#fdf4ff; border:1px solid rgba(147,51,234,0.2);">
+            <i class="fas fa-headset text-purple-500 mt-0.5 text-lg"></i>
+            <div>
+              <div class="font-700 text-gray-900 text-sm">24/7 Support</div>
+              <div class="text-slate-500 text-xs">Always reachable</div>
+            </div>
+          </div>
+        </div>
+
+        <a href="#contact" class="btn-amber">
+          <i class="fas fa-handshake"></i> Partner With Us
+        </a>
+      </div>
+
+      <!-- Right: Stats + Visual card -->
+      <div class="space-y-6">
+
+        <!-- Big quote card -->
+        <div class="rounded-2xl p-8 relative overflow-hidden" style="background:linear-gradient(135deg,#0B1120,#0f1a2e); border:1px solid rgba(245,158,11,0.2);">
+          <div style="position:absolute; top:-30px; right:-30px; width:180px; height:180px; background:radial-gradient(circle, rgba(245,158,11,0.1) 0%, transparent 70%); pointer-events:none;"></div>
+          <i class="fas fa-quote-left text-amber-500/30 text-4xl mb-4"></i>
+          <p class="text-slate-300 text-lg leading-relaxed font-display italic mb-5">
+            "We don't just drive people from point A to point B — we make sure your team starts and ends every shift with a smile."
+          </p>
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full flex items-center justify-center font-800 text-sm" style="background:rgba(245,158,11,0.2); color:#f59e0b;">DT</div>
+            <div>
+              <div class="text-white font-700 text-sm">Durwa Travels Team</div>
+              <div class="text-slate-500 text-xs">Wagholi, Pune</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stats row -->
+        <div class="grid grid-cols-3 gap-4">
+          <div class="text-center p-5 rounded-xl" style="background:#f8fafc; border:1px solid #e2e8f0;">
+            <div class="font-display text-3xl font-bold text-gray-900 mb-1">500+</div>
+            <div class="text-slate-500 text-xs uppercase tracking-wider">Daily Rides</div>
+          </div>
+          <div class="text-center p-5 rounded-xl" style="background:#f8fafc; border:1px solid #e2e8f0;">
+            <div class="font-display text-3xl font-bold text-gray-900 mb-1">30+</div>
+            <div class="text-slate-500 text-xs uppercase tracking-wider">IT Clients</div>
+          </div>
+          <div class="text-center p-5 rounded-xl" style="background:#f8fafc; border:1px solid #e2e8f0;">
+            <div class="font-display text-3xl font-bold text-gray-900 mb-1">50+</div>
+            <div class="text-slate-500 text-xs uppercase tracking-wider">Vehicles</div>
+          </div>
+        </div>
+
+        <!-- Values list -->
+        <div class="rounded-2xl p-6" style="background:#f8fafc; border:1px solid #e2e8f0;">
+          <h4 class="font-700 text-gray-900 text-sm mb-4 uppercase tracking-wider">Our Core Values</h4>
+          <div class="space-y-3">
+            <div class="flex items-center gap-3">
+              <div class="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0" style="background:rgba(245,158,11,0.1);">
+                <i class="fas fa-clock text-amber-500 text-xs"></i>
+              </div>
+              <div>
+                <span class="text-gray-800 text-sm font-600">Punctuality</span>
+                <span class="text-slate-400 text-xs ml-2">— Every pickup, every time</span>
+              </div>
+            </div>
+            <div class="flex items-center gap-3">
+              <div class="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0" style="background:rgba(34,197,94,0.1);">
+                <i class="fas fa-heart text-green-500 text-xs"></i>
+              </div>
+              <div>
+                <span class="text-gray-800 text-sm font-600">Employee Safety</span>
+                <span class="text-slate-400 text-xs ml-2">— Non-negotiable standard</span>
+              </div>
+            </div>
+            <div class="flex items-center gap-3">
+              <div class="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0" style="background:rgba(59,130,246,0.1);">
+                <i class="fas fa-handshake text-blue-500 text-xs"></i>
+              </div>
+              <div>
+                <span class="text-gray-800 text-sm font-600">Transparency</span>
+                <span class="text-slate-400 text-xs ml-2">— Clear pricing, no surprises</span>
+              </div>
+            </div>
+            <div class="flex items-center gap-3">
+              <div class="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0" style="background:rgba(147,51,234,0.1);">
+                <i class="fas fa-rocket text-purple-500 text-xs"></i>
+              </div>
+              <div>
+                <span class="text-gray-800 text-sm font-600">Technology-Driven</span>
+                <span class="text-slate-400 text-xs ml-2">— GPS, WhatsApp dispatch & more</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Team / Why Trust Us strip -->
+    <div class="chrome-line mb-12" style="background:linear-gradient(90deg, transparent, rgba(245,158,11,0.3), transparent);"></div>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div class="text-center p-6 rounded-2xl" style="border:1px solid #e2e8f0;">
+        <div class="w-14 h-14 rounded-2xl mx-auto mb-4 flex items-center justify-center text-2xl" style="background:linear-gradient(135deg,#fef3c7,#fef9ec);">🚘</div>
+        <h4 class="font-700 text-gray-900 text-sm mb-2">Well-Maintained Fleet</h4>
+        <p class="text-slate-500 text-xs leading-relaxed">Regular servicing, sanitization, and fitness checks on every vehicle.</p>
+      </div>
+      <div class="text-center p-6 rounded-2xl" style="border:1px solid #e2e8f0;">
+        <div class="w-14 h-14 rounded-2xl mx-auto mb-4 flex items-center justify-center text-2xl" style="background:linear-gradient(135deg,#f0fdf4,#dcfce7);">👨‍✈️</div>
+        <h4 class="font-700 text-gray-900 text-sm mb-2">Professional Drivers</h4>
+        <p class="text-slate-500 text-xs leading-relaxed">Police-verified, trained, and courteous drivers you can trust.</p>
+      </div>
+      <div class="text-center p-6 rounded-2xl" style="border:1px solid #e2e8f0;">
+        <div class="w-14 h-14 rounded-2xl mx-auto mb-4 flex items-center justify-center text-2xl" style="background:linear-gradient(135deg,#eff6ff,#dbeafe);">📍</div>
+        <h4 class="font-700 text-gray-900 text-sm mb-2">Real-Time GPS</h4>
+        <p class="text-slate-500 text-xs leading-relaxed">Track every vehicle live. Instant alerts for delays or route deviations.</p>
+      </div>
+      <div class="text-center p-6 rounded-2xl" style="border:1px solid #e2e8f0;">
+        <div class="w-14 h-14 rounded-2xl mx-auto mb-4 flex items-center justify-center text-2xl" style="background:linear-gradient(135deg,#fdf4ff,#f5f3ff);">📋</div>
+        <h4 class="font-700 text-gray-900 text-sm mb-2">Compliance Ready</h4>
+        <p class="text-slate-500 text-xs leading-relaxed">GST invoicing, SLA reports, and audit-ready documentation every month.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════
+     FOOTER
+════════════════════════════════════════════════════════ -->
+<footer id="footer" class="footer-section py-16">
+  <div class="max-w-7xl mx-auto px-6 lg:px-12">
+    <div class="grid md:grid-cols-4 gap-10 mb-12">
+
+      <!-- Brand col -->
+      <div class="md:col-span-1">
+        <div class="logo-dt flex items-center gap-2 mb-4">
+          <span style="color:#f59e0b; font-size:1.4rem;">DT</span>
+          <span style="color:rgba(255,255,255,0.2); font-weight:300;">|</span>
+          <span style="color:#f1f5f9; font-size:0.9rem; font-weight:700; letter-spacing:0.06em;">DURWA TRAVELS</span>
+        </div>
+        <p class="text-slate-500 text-xs leading-relaxed mb-5">Connecting Journeys, Exploring New Horizons. Pune's trusted partner for enterprise-grade employee transportation.</p>
+        <div class="flex gap-3">
+          <a href="#" class="w-8 h-8 rounded-lg bg-white/5 hover:bg-amber-500/20 flex items-center justify-center text-slate-500 hover:text-amber-400 transition-all text-sm">
+            <i class="fab fa-facebook-f"></i>
+          </a>
+          <a href="#" class="w-8 h-8 rounded-lg bg-white/5 hover:bg-amber-500/20 flex items-center justify-center text-slate-500 hover:text-amber-400 transition-all text-sm">
+            <i class="fab fa-instagram"></i>
+          </a>
+          <a href="https://wa.me/917776976767" class="w-8 h-8 rounded-lg bg-white/5 hover:bg-green-500/20 flex items-center justify-center text-slate-500 hover:text-green-400 transition-all text-sm">
+            <i class="fab fa-whatsapp"></i>
+          </a>
+          <a href="#" class="w-8 h-8 rounded-lg bg-white/5 hover:bg-amber-500/20 flex items-center justify-center text-slate-500 hover:text-amber-400 transition-all text-sm">
+            <i class="fab fa-linkedin-in"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Services -->
+      <div>
+        <h4 class="text-white text-sm font-700 mb-5 uppercase tracking-wider">Services</h4>
+        <ul class="space-y-2.5 text-slate-500 text-sm">
+          <li><a href="#" class="hover:text-amber-400 transition-colors">Employee Transportation</a></li>
+          <li><a href="#" class="hover:text-amber-400 transition-colors">Car Rental</a></li>
+          <li><a href="#" class="hover:text-amber-400 transition-colors">Airport Transfers</a></li>
+          <li><a href="#" class="hover:text-amber-400 transition-colors">Tours & Travels</a></li>
+          <li><a href="#" class="hover:text-amber-400 transition-colors">Premium Car Services</a></li>
+        </ul>
+      </div>
+
+      <!-- Company -->
+      <div>
+        <h4 class="text-white text-sm font-700 mb-5 uppercase tracking-wider">Company</h4>
+        <ul class="space-y-2.5 text-slate-500 text-sm">
+          <li><a href="#about" class="hover:text-amber-400 transition-colors">About Durwa</a></li>
+          <li><a href="#" class="hover:text-amber-400 transition-colors">Our Fleet</a></li>
+          <li><a href="#" class="hover:text-amber-400 transition-colors">Corporate Plans</a></li>
+          <li><a href="#" class="hover:text-amber-400 transition-colors">Safety Standards</a></li>
+          <li><a href="#" class="hover:text-amber-400 transition-colors">Careers</a></li>
+        </ul>
+      </div>
+
+      <!-- Contact -->
+      <div>
+        <h4 class="text-white text-sm font-700 mb-5 uppercase tracking-wider">Contact</h4>
+        <ul class="space-y-3 text-slate-500 text-sm">
+          <li class="flex items-start gap-2">
+            <i class="fas fa-map-marker-alt text-amber-500/60 mt-0.5 flex-shrink-0 text-xs"></i>
+            <span>Shop No.66, G/F, Kumar Palladium Plaza, Wagholi, Pune – 412207</span>
+          </li>
+          <li class="flex items-center gap-2">
+            <i class="fas fa-phone-alt text-amber-500/60 text-xs"></i>
+            <a href="tel:7776976767" class="hover:text-amber-400 transition-colors">7776976767 / 9146966670</a>
+          </li>
+          <li class="flex items-center gap-2">
+            <i class="fas fa-envelope text-amber-500/60 text-xs"></i>
+            <a href="mailto:booking@durwatravels.in" class="hover:text-amber-400 transition-colors">booking@durwatravels.in</a>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="chrome-line mb-6"></div>
+
+    <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+      <p class="text-slate-600 text-xs">© 2025 Durwa Travels. All rights reserved. GSTIN: 27XXXXX.</p>
+      <div class="flex gap-5 text-slate-600 text-xs">
+        <a href="#" class="hover:text-slate-400 transition-colors">Privacy Policy</a>
+        <a href="#" class="hover:text-slate-400 transition-colors">Terms of Service</a>
+        <a href="#" class="hover:text-slate-400 transition-colors">Refund Policy</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+<!-- ═══════════════════════════════════════════════════════
+     ADMIN DASHBOARD SECTION
+════════════════════════════════════════════════════════ -->
+<div id="admin-dashboard" class="admin-wrapper">
+
+  <!-- Demo Banner -->
+  <div class="admin-demo-banner">
+    <i class="fas fa-flask mr-2"></i>
+    ⚡ DEMO: Admin Dispatch Dashboard — Internal Operations View · Not Publicly Accessible
+    <i class="fas fa-flask ml-2"></i>
+  </div>
+
+  <!-- Dashboard Shell -->
+  <div class="flex" style="min-height:780px;">
+
+    <!-- Sidebar -->
+    <div class="admin-sidebar py-6">
+      <!-- Sidebar Logo -->
+      <div class="px-5 mb-7">
+        <div class="text-xs font-700 text-amber-500 uppercase tracking-widest mb-1">DURWA OPS</div>
+        <div class="text-slate-600 text-xs">Dispatch Control Center</div>
+      </div>
+
+      <!-- Sidebar Nav -->
+      <nav class="space-y-1">
+        <a href="#" class="sidebar-link active">
+          <i class="fas fa-list-alt w-4 text-center"></i> Roster
+        </a>
+        <a href="#" class="sidebar-link">
+          <i class="fas fa-map-marked-alt w-4 text-center"></i> Live Map
+        </a>
+        <a href="#" class="sidebar-link">
+          <i class="fas fa-bus w-4 text-center"></i> Vehicles
+        </a>
+        <a href="#" class="sidebar-link">
+          <i class="fas fa-id-badge w-4 text-center"></i> Drivers
+        </a>
+        <a href="#" class="sidebar-link">
+          <i class="fas fa-chart-bar w-4 text-center"></i> Reports
+        </a>
+        <a href="#" class="sidebar-link">
+          <i class="fab fa-whatsapp w-4 text-center"></i> WA Logs
+        </a>
+        <a href="#" class="sidebar-link">
+          <i class="fas fa-cog w-4 text-center"></i> Settings
+        </a>
+      </nav>
+
+      <!-- Sidebar footer -->
+      <div class="mt-auto px-5 pt-8 border-t border-white/5 mt-8">
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-full bg-amber-500/20 flex items-center justify-center text-amber-400 text-xs font-700">DP</div>
+          <div>
+            <div class="text-white text-xs font-600">Dispatch Admin</div>
+            <div class="text-slate-600 text-xs">ops@durwatravels.in</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Dashboard Area -->
+    <div class="admin-main">
+
+      <!-- Top bar -->
+      <div class="flex items-center justify-between mb-7">
+        <div>
+          <h2 class="text-white font-bold text-xl">Today's IT Shift Roster</h2>
+          <p class="text-slate-500 text-sm mt-0.5">
+            <span id="today-date"></span> · Showing all active bookings for the day
+          </p>
+        </div>
+        <div class="flex items-center gap-3">
+          <div class="flex items-center gap-2 text-xs text-slate-500 bg-white/5 px-3 py-2 rounded-lg border border-white/5">
+            <div class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></div>
+            System Live
+          </div>
+          <button class="btn-amber text-xs py-2 px-4">
+            <i class="fas fa-plus"></i> Add Booking
+          </button>
+        </div>
+      </div>
+
+      <!-- Summary pills -->
+      <div class="flex flex-wrap gap-3 mb-6">
+        <div class="px-4 py-2 rounded-xl text-xs font-600 border" style="background:rgba(245,158,11,0.08); border-color:rgba(245,158,11,0.2); color:#f59e0b;">
+          <i class="fas fa-clock mr-1.5"></i>5 Pending
+        </div>
+        <div class="px-4 py-2 rounded-xl text-xs font-600 border" style="background:rgba(34,197,94,0.08); border-color:rgba(34,197,94,0.2); color:#22c55e;">
+          <i class="fas fa-check-circle mr-1.5"></i>4 Assigned
+        </div>
+        <div class="px-4 py-2 rounded-xl text-xs font-600 border" style="background:rgba(59,130,246,0.08); border-color:rgba(59,130,246,0.2); color:#60a5fa;">
+          <i class="fas fa-route mr-1.5"></i>3 En-Route
+        </div>
+        <div class="px-4 py-2 rounded-xl text-xs font-600 border ml-auto" style="background:rgba(255,255,255,0.04); border-color:rgba(255,255,255,0.08); color:#64748b;">
+          <i class="fas fa-filter mr-1.5"></i>Filter Shifts
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div class="rounded-xl overflow-hidden border border-white/[0.06]">
+        <table class="admin-table w-full" style="border-collapse:collapse;">
+          <thead>
+            <tr>
+              <th>Shift ID</th>
+              <th>Employee Name</th>
+              <th>Company</th>
+              <th>Pickup Area</th>
+              <th>Time</th>
+              <th>Status</th>
+              <th>Dispatch</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="font-mono text-amber-500/80 text-xs">SHF-0091</span></td>
+              <td>
+                <div class="flex items-center gap-2">
+                  <div class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-700" style="background:rgba(59,130,246,0.15); color:#60a5fa;">PK</div>
+                  <span>Priya Kulkarni</span>
+                </div>
+              </td>
+              <td><span class="text-slate-300 font-500">Infosys BPM</span></td>
+              <td><span class="text-slate-400"><i class="fas fa-map-pin text-amber-500/50 mr-1 text-xs"></i>Wagholi</span></td>
+              <td><span class="font-mono text-xs text-slate-300">06:30 AM</span></td>
+              <td><span class="status-badge status-pending"><i class="fas fa-circle text-[7px]"></i> Pending</span></td>
+              <td>
+                <button class="btn-dispatch" onclick="openDispatchModal('SHF-0091', 'Priya Kulkarni', 'Infosys BPM', 'Wagholi', '06:30 AM')">
+                  <i class="fab fa-whatsapp"></i> Assign & Dispatch
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td><span class="font-mono text-amber-500/80 text-xs">SHF-0092</span></td>
+              <td>
+                <div class="flex items-center gap-2">
+                  <div class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-700" style="background:rgba(168,85,247,0.15); color:#a855f7;">AM</div>
+                  <span>Amit Mahajan</span>
+                </div>
+              </td>
+              <td><span class="text-slate-300 font-500">TCS Hinjewadi</span></td>
+              <td><span class="text-slate-400"><i class="fas fa-map-pin text-amber-500/50 mr-1 text-xs"></i>Kharadi</span></td>
+              <td><span class="font-mono text-xs text-slate-300">07:00 AM</span></td>
+              <td><span class="status-badge status-assigned"><i class="fas fa-circle text-[7px]"></i> Assigned</span></td>
+              <td>
+                <button class="btn-dispatch" onclick="openDispatchModal('SHF-0092', 'Amit Mahajan', 'TCS Hinjewadi', 'Kharadi', '07:00 AM')">
+                  <i class="fab fa-whatsapp"></i> Assign & Dispatch
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td><span class="font-mono text-amber-500/80 text-xs">SHF-0093</span></td>
+              <td>
+                <div class="flex items-center gap-2">
+                  <div class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-700" style="background:rgba(245,158,11,0.15); color:#f59e0b;">SJ</div>
+                  <span>Sneha Joshi</span>
+                </div>
+              </td>
+              <td><span class="text-slate-300 font-500">Wipro Limited</span></td>
+              <td><span class="text-slate-400"><i class="fas fa-map-pin text-amber-500/50 mr-1 text-xs"></i>Viman Nagar</span></td>
+              <td><span class="font-mono text-xs text-slate-300">08:15 AM</span></td>
+              <td><span class="status-badge status-enroute"><i class="fas fa-circle text-[7px]"></i> En-Route</span></td>
+              <td>
+                <button class="btn-dispatch" onclick="openDispatchModal('SHF-0093', 'Sneha Joshi', 'Wipro Limited', 'Viman Nagar', '08:15 AM')">
+                  <i class="fab fa-whatsapp"></i> Assign & Dispatch
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td><span class="font-mono text-amber-500/80 text-xs">SHF-0094</span></td>
+              <td>
+                <div class="flex items-center gap-2">
+                  <div class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-700" style="background:rgba(34,197,94,0.15); color:#22c55e;">RD</div>
+                  <span>Rohan Desai</span>
+                </div>
+              </td>
+              <td><span class="text-slate-300 font-500">Cognizant</span></td>
+              <td><span class="text-slate-400"><i class="fas fa-map-pin text-amber-500/50 mr-1 text-xs"></i>Hadapsar</span></td>
+              <td><span class="font-mono text-xs text-slate-300">09:00 AM</span></td>
+              <td><span class="status-badge status-pending"><i class="fas fa-circle text-[7px]"></i> Pending</span></td>
+              <td>
+                <button class="btn-dispatch" onclick="openDispatchModal('SHF-0094', 'Rohan Desai', 'Cognizant', 'Hadapsar', '09:00 AM')">
+                  <i class="fab fa-whatsapp"></i> Assign & Dispatch
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td><span class="font-mono text-amber-500/80 text-xs">SHF-0095</span></td>
+              <td>
+                <div class="flex items-center gap-2">
+                  <div class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-700" style="background:rgba(239,68,68,0.15); color:#f87171;">NP</div>
+                  <span>Nisha Patil</span>
+                </div>
+              </td>
+              <td><span class="text-slate-300 font-500">Accenture</span></td>
+              <td><span class="text-slate-400"><i class="fas fa-map-pin text-amber-500/50 mr-1 text-xs"></i>Magarpatta</span></td>
+              <td><span class="font-mono text-xs text-slate-300">10:30 AM</span></td>
+              <td><span class="status-badge status-assigned"><i class="fas fa-circle text-[7px]"></i> Assigned</span></td>
+              <td>
+                <button class="btn-dispatch" onclick="openDispatchModal('SHF-0095', 'Nisha Patil', 'Accenture', 'Magarpatta', '10:30 AM')">
+                  <i class="fab fa-whatsapp"></i> Assign & Dispatch
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td><span class="font-mono text-amber-500/80 text-xs">SHF-0096</span></td>
+              <td>
+                <div class="flex items-center gap-2">
+                  <div class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-700" style="background:rgba(20,184,166,0.15); color:#2dd4bf;">VK</div>
+                  <span>Vijay Kamble</span>
+                </div>
+              </td>
+              <td><span class="text-slate-300 font-500">Tech Mahindra</span></td>
+              <td><span class="text-slate-400"><i class="fas fa-map-pin text-amber-500/50 mr-1 text-xs"></i>Baner</span></td>
+              <td><span class="font-mono text-xs text-slate-300">02:00 PM</span></td>
+              <td><span class="status-badge status-pending"><i class="fas fa-circle text-[7px]"></i> Pending</span></td>
+              <td>
+                <button class="btn-dispatch" onclick="openDispatchModal('SHF-0096', 'Vijay Kamble', 'Tech Mahindra', 'Baner', '02:00 PM')">
+                  <i class="fab fa-whatsapp"></i> Assign & Dispatch
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td><span class="font-mono text-amber-500/80 text-xs">SHF-0097</span></td>
+              <td>
+                <div class="flex items-center gap-2">
+                  <div class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-700" style="background:rgba(251,146,60,0.15); color:#fb923c;">AS</div>
+                  <span>Aakanksha Shinde</span>
+                </div>
+              </td>
+              <td><span class="text-slate-300 font-500">Infosys BPM</span></td>
+              <td><span class="text-slate-400"><i class="fas fa-map-pin text-amber-500/50 mr-1 text-xs"></i>Koregaon Park</span></td>
+              <td><span class="font-mono text-xs text-slate-300">06:00 PM</span></td>
+              <td><span class="status-badge status-enroute"><i class="fas fa-circle text-[7px]"></i> En-Route</span></td>
+              <td>
+                <button class="btn-dispatch" onclick="openDispatchModal('SHF-0097', 'Aakanksha Shinde', 'Infosys BPM', 'Koregaon Park', '06:00 PM')">
+                  <i class="fab fa-whatsapp"></i> Assign & Dispatch
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td><span class="font-mono text-amber-500/80 text-xs">SHF-0098</span></td>
+              <td>
+                <div class="flex items-center gap-2">
+                  <div class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-700" style="background:rgba(99,102,241,0.15); color:#818cf8;">MR</div>
+                  <span>Mukesh Rathod</span>
+                </div>
+              </td>
+              <td><span class="text-slate-300 font-500">HCL Technologies</span></td>
+              <td><span class="text-slate-400"><i class="fas fa-map-pin text-amber-500/50 mr-1 text-xs"></i>Dhanori</span></td>
+              <td><span class="font-mono text-xs text-slate-300">10:00 PM</span></td>
+              <td><span class="status-badge status-pending"><i class="fas fa-circle text-[7px]"></i> Pending</span></td>
+              <td>
+                <button class="btn-dispatch" onclick="openDispatchModal('SHF-0098', 'Mukesh Rathod', 'HCL Technologies', 'Dhanori', '10:00 PM')">
+                  <i class="fab fa-whatsapp"></i> Assign & Dispatch
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Table footer meta -->
+      <div class="flex items-center justify-between mt-4 text-xs text-slate-600">
+        <span>Showing 8 of 12 bookings for today</span>
+        <div class="flex items-center gap-2">
+          <button class="px-3 py-1.5 rounded border border-white/5 hover:border-amber-500/30 hover:text-slate-300 transition-all">← Prev</button>
+          <span class="px-3 py-1.5 rounded border border-amber-500/30 text-amber-500">1</span>
+          <button class="px-3 py-1.5 rounded border border-white/5 hover:border-amber-500/30 hover:text-slate-300 transition-all">Next →</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Dashboard footer -->
+  <div style="background:#060b14; border-top:1px solid rgba(255,255,255,0.04); padding:12px 28px;" class="flex items-center justify-between text-xs text-slate-700">
+    <span>Durwa Travels — Dispatch Control Center v2.1.0</span>
+    <span>WhatsApp Cloud API: <span class="text-green-500">● Connected</span></span>
+    <span>Last sync: Just now</span>
+  </div>
+
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════
+     WHATSAPP DISPATCH MODAL
+════════════════════════════════════════════════════════ -->
+<div id="dispatchModal" class="modal-overlay" onclick="handleModalOverlayClick(event)">
+  <div class="modal-box">
+
+    <!-- Modal Header -->
+    <div class="px-7 py-5 flex items-center justify-between border-b border-white/[0.06]">
+      <div>
+        <div class="flex items-center gap-2 mb-0.5">
+          <i class="fab fa-whatsapp text-green-400 text-lg"></i>
+          <h3 class="text-white font-bold text-base">Assign Driver & Dispatch</h3>
+        </div>
+        <p class="text-slate-500 text-xs" id="modal-shift-info">Shift SHF-XXXX · Employee Name</p>
+      </div>
+      <button onclick="closeModal()" class="w-8 h-8 rounded-lg bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white flex items-center justify-center transition-all text-sm">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <!-- Modal Body -->
+    <div class="px-7 py-6 space-y-5">
+
+      <!-- Booking Summary -->
+      <div class="grid grid-cols-3 gap-3">
+        <div class="rounded-xl p-3" style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06);">
+          <div class="text-slate-600 text-xs mb-1">Company</div>
+          <div class="text-slate-200 text-sm font-600" id="modal-company">—</div>
+        </div>
+        <div class="rounded-xl p-3" style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06);">
+          <div class="text-slate-600 text-xs mb-1">Pickup</div>
+          <div class="text-slate-200 text-sm font-600" id="modal-pickup">—</div>
+        </div>
+        <div class="rounded-xl p-3" style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06);">
+          <div class="text-slate-600 text-xs mb-1">Time</div>
+          <div class="text-slate-200 text-sm font-600" id="modal-time">—</div>
+        </div>
+      </div>
+
+      <!-- Driver selection -->
+      <div>
+        <label class="block text-xs text-slate-500 font-600 uppercase tracking-wider mb-2">
+          <i class="fas fa-id-badge mr-1 text-amber-500/60"></i> Select Driver
+        </label>
+        <select class="select-dark" id="driverSelect" onchange="updateWAPreview()">
+          <option value="" disabled selected>— Choose an available driver —</option>
+          <option value="Rajesh Gaikwad|+91 94234 11001|MH12-AB-4521">Rajesh Gaikwad · MH12-AB-4521 · +91 94234 11001</option>
+          <option value="Sunil More|+91 98765 22003|MH12-CD-7843">Sunil More · MH12-CD-7843 · +91 98765 22003</option>
+          <option value="Prakash Bhosale|+91 90123 33004|MH12-EF-9901">Prakash Bhosale · MH12-EF-9901 · +91 90123 33004</option>
+          <option value="Vikas Shinde|+91 87654 44002|MH14-GH-1234">Vikas Shinde · MH14-GH-1234 · +91 87654 44002</option>
+          <option value="Manoj Pawar|+91 76543 55007|MH12-IJ-5566">Manoj Pawar · MH12-IJ-5566 · +91 76543 55007</option>
+        </select>
+      </div>
+
+      <!-- WhatsApp Preview -->
+      <div>
+        <label class="block text-xs text-slate-500 font-600 uppercase tracking-wider mb-3">
+          <i class="fab fa-whatsapp mr-1 text-green-400/60"></i> Automated WhatsApp Message Preview
+        </label>
+        <div class="wa-preview" id="wa-message-preview">
+          <span class="text-slate-600">← Select a driver above to preview the message</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Modal Footer -->
+    <div class="px-7 py-5 border-t border-white/[0.06] flex gap-3 justify-end">
+      <button onclick="closeModal()" class="px-5 py-2.5 rounded-xl text-slate-400 text-sm font-600 hover:text-white border border-white/8 hover:border-white/15 transition-all">
+        Cancel
+      </button>
+      <button onclick="confirmDispatch()" class="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl text-white text-sm font-700 transition-all" style="background:linear-gradient(135deg,#25d366,#128c7e);" id="confirmBtn">
+        <i class="fab fa-whatsapp"></i>
+        Confirm & Send WhatsApp
+      </button>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════
+     SUCCESS TOAST
+════════════════════════════════════════════════════════ -->
+<div id="successToast" class="fixed bottom-6 right-6 z-[6000] flex items-center gap-3 px-5 py-4 rounded-xl text-white text-sm font-600 shadow-2xl transition-all duration-500 opacity-0 translate-y-4 pointer-events-none"
+     style="background:linear-gradient(135deg,#25d366,#128c7e); border:1px solid rgba(255,255,255,0.15);">
+  <i class="fab fa-whatsapp text-xl"></i>
+  <div>
+    <div class="font-700">WhatsApp Sent Successfully!</div>
+    <div class="text-white/70 text-xs" id="toast-driver-name">Driver notified via WhatsApp Cloud API</div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════
+     JAVASCRIPT
+════════════════════════════════════════════════════════ -->
+<script>
+  // ─── Today's date ─────────────────────────────────────
+  const dateEl = document.getElementById('today-date');
+  if (dateEl) {
+    dateEl.textContent = new Date().toLocaleDateString('en-IN', {
+      weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+    });
+  }
+
+  // ─── Modal state ──────────────────────────────────────
+  let currentShift = {};
+
+  function openDispatchModal(shiftId, empName, company, pickup, time) {
+    currentShift = { shiftId, empName, company, pickup, time };
+
+    document.getElementById('modal-shift-info').textContent = `Shift ${shiftId} · ${empName}`;
+    document.getElementById('modal-company').textContent = company;
+    document.getElementById('modal-pickup').textContent = pickup;
+    document.getElementById('modal-time').textContent = time;
+    document.getElementById('driverSelect').value = '';
+    document.getElementById('wa-message-preview').innerHTML =
+      '<span style="color:#475569;">← Select a driver above to preview the message</span>';
+
+    document.getElementById('dispatchModal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    document.getElementById('dispatchModal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function handleModalOverlayClick(e) {
+    if (e.target === document.getElementById('dispatchModal')) closeModal();
+  }
+
+  function updateWAPreview() {
+    const sel = document.getElementById('driverSelect');
+    const val = sel.value;
+    if (!val) return;
+
+    const [driverName, driverPhone, vehicleNo] = val.split('|');
+    const { shiftId, empName, company, pickup, time } = currentShift;
+
+    const today = new Date().toLocaleDateString('en-IN', { day:'2-digit', month:'short', year:'numeric' });
+
+    const msg = `
+🚗 *DURWA TRAVELS — Shift Assignment*
+
+Dear *${driverName}*,
+
+You have been assigned a new pickup. Please confirm.
+
+━━━━━━━━━━━━━━━
+📋 *Shift ID:* ${shiftId}
+👤 *Employee:* ${empName}
+🏢 *Company:* ${company}
+📍 *Pickup Point:* ${pickup}, Pune
+⏰ *Pickup Time:* ${time}
+📅 *Date:* ${today}
+━━━━━━━━━━━━━━━
+
+🚙 *Your Vehicle:* ${vehicleNo}
+
+✅ Please reply *CONFIRMED* once acknowledged.
+📞 For support: 7776976767
+
+— Durwa Travels Dispatch Team`.trim();
+
+    document.getElementById('wa-message-preview').innerHTML =
+      msg.replace(/\n/g, '<br/>').replace(/\*(.*?)\*/g, '<span style="color:#e2e8f0;font-weight:700;">$1</span>');
+  }
+
+  function confirmDispatch() {
+    const sel = document.getElementById('driverSelect');
+    if (!sel.value) {
+      sel.style.borderColor = '#ef4444';
+      setTimeout(() => sel.style.borderColor = '', 1500);
+      return;
+    }
+    const [driverName] = sel.value.split('|');
+    closeModal();
+    showToast(`Message sent to ${driverName}`);
+  }
+
+  function showToast(msg) {
+    const toast = document.getElementById('successToast');
+    document.getElementById('toast-driver-name').textContent = msg;
+    toast.style.opacity = '1';
+    toast.style.transform = 'translateY(0)';
+    toast.style.pointerEvents = 'auto';
+    setTimeout(() => {
+      toast.style.opacity = '0';
+      toast.style.transform = 'translateY(16px)';
+      toast.style.pointerEvents = 'none';
+    }, 4000);
+  }
+
+  // Close modal on Esc
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeModal();
+  });
+
+  // ─── Mobile menu ──────────────────────────────────────
+  function toggleMobileMenu() {
+    const nav = document.getElementById('mobileNav');
+    nav.classList.toggle('open');
+  }
+  function closeMobileMenu() {
+    document.getElementById('mobileNav').classList.remove('open');
+  }
+  // Close mobile nav when clicking outside
+  document.addEventListener('click', function(e) {
+    const nav = document.getElementById('mobileNav');
+    const btn = document.querySelector('.mobile-menu-btn');
+    if (nav.classList.contains('open') && !nav.contains(e.target) && !btn.contains(e.target)) {
+      nav.classList.remove('open');
+    }
+  });
+</script>
+
+</body>
+</html>
